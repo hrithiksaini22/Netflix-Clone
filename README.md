@@ -33,7 +33,8 @@
 - Clone your application's code repository onto the EC2 instance:
     
     ```bash
-    git clone https://github.com/N4si/DevSecOps-Project.git
+    git clone https://github.com/hrithiksaini22/Netflix-Clone.git
+
     ```
     
 
@@ -200,7 +201,7 @@ pipeline {
         }
         stage('Checkout from Git') {
             steps {
-                git branch: 'main', url: 'https://github.com/N4si/DevSecOps-Project.git'
+                git branch: 'main', url: 'https://github.com/hrithiksaini22/Netflix-Clone.git'
             }
         }
         stage("Sonarqube Analysis") {
@@ -281,6 +282,8 @@ pipeline{
     }
     environment {
         SCANNER_HOME=tool 'sonar-scanner'
+        registry = "980921731940.dkr.ecr.us-east-1.amazonaws.com/my-reepository"
+        BUILD_NUMBER = "${BUILD_NUMBER}"
     }
     stages {
         stage('clean workspace'){
@@ -290,7 +293,7 @@ pipeline{
         }
         stage('Checkout from Git'){
             steps{
-                git branch: 'main', url: 'https://github.com/N4si/DevSecOps-Project.git'
+                git branch: 'main', url: 'https://github.com/hrithiksaini22/Netflix-Clone.git'
             }
         }
         stage("Sonarqube Analysis "){
@@ -324,26 +327,55 @@ pipeline{
                 sh "trivy fs . > trivyfs.txt"
             }
         }
-        stage("Docker Build & Push"){
-            steps{
-                script{
-                   withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){   
-                       sh "docker build --build-arg TMDB_V3_API_KEY=<yourapikey> -t netflix ."
-                       sh "docker tag netflix nasi101/netflix:latest "
-                       sh "docker push nasi101/netflix:latest "
-                    }
+        stage('Building image') {
+            steps {
+                script {
+                    // List files for debugging purposes
+                    sh 'ls -la /var/lib/jenkins/workspace/CI'  // Debugging workspace contents
+
+                    // Build Docker image
+                    sh "docker build -t ${registry}:${BUILD_NUMBER} ."
                 }
             }
         }
         stage("TRIVY"){
             steps{
-                sh "trivy image nasi101/netflix:latest > trivyimage.txt" 
+                sh "trivy image ${registry}:${BUILD_NUMBER} > trivyimage.txt" 
             }
         }
-        stage('Deploy to container'){
-            steps{
-                sh 'docker run -d --name netflix -p 8081:80 nasi101/netflix:latest'
+        stage('Pushing to ECR') {
+            steps {
+                script {
+                    // Log in to ECR using AWS CLI
+                    sh 'aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 980921731940.dkr.ecr.us-east-1.amazonaws.com'
+                    
+                    // Push Docker image to ECR
+                    sh "docker push ${registry}:${BUILD_NUMBER}"
+                }
             }
+        }
+    post {
+        // Clean up after the build process
+        always {
+            // Clean the workspace
+            cleanWs(cleanWhenNotBuilt: false,
+                    deleteDirs: true,
+                    disableDeferredWipeout: true,
+                    notFailBuild: true,
+                    patterns: [[pattern: '.gitignore', type: 'INCLUDE'],
+                               [pattern: '.propsfile', type: 'EXCLUDE']])
+
+            // Clean up Docker containers and volumes (optional)
+            sh '''
+                # Remove any stopped containers
+                docker container prune -f
+
+                # Remove unused Docker volumes
+                docker volume prune -f
+
+                # Remove unused networks
+                docker network prune -f
+            '''
         }
     }
 }
