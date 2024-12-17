@@ -260,15 +260,6 @@ Certainly, here are the instructions without step numbers:
   - docker-build-step
 - Click on the "Install without restart" button to install these plugins.
 
-**Add DockerHub Credentials:**
-
-- To securely handle DockerHub credentials in your Jenkins pipeline, follow these steps:
-  - Go to "Dashboard" → "Manage Jenkins" → "Manage Credentials."
-  - Click on "System" and then "Global credentials (unrestricted)."
-  - Click on "Add Credentials" on the left side.
-  - Choose "Secret text" as the kind of credentials.
-  - Enter your DockerHub credentials (Username and Password) and give the credentials an ID (e.g., "docker").
-  - Click "OK" to save your DockerHub credentials.
 
 Now, you have installed the Dependency-Check plugin, configured the tool, and added Docker-related plugins along with your DockerHub credentials in Jenkins. You can now proceed with configuring your Jenkins pipeline to include these tools and credentials in your CI/CD process.
 
@@ -334,7 +325,7 @@ pipeline{
                     sh 'ls -la /var/lib/jenkins/workspace/CI'  // Debugging workspace contents
 
                     // Build Docker image
-                    sh "docker build -t ${registry}:${BUILD_NUMBER} ."
+                    sh "docker build --build-arg TMDB_V3_API_KEY=<yourtmdbapikey> -t ${registry}:${BUILD_NUMBER} ."
                 }
             }
         }
