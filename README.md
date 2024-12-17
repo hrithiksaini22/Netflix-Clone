@@ -76,7 +76,7 @@ terraform plan
 '''
 This will show a summary of the actions Terraform will take to create, update, or delete resources.
 
-5. Apply the Configuration
+5. ### Apply the Configuration
 Apply Changes
 After reviewing the plan, you can apply the configuration to create the resources. Run:
 '''bash
