@@ -484,8 +484,10 @@ pipeline {
 
 **Phase 4: Monitoring**
 
-1. **Install Prometheus and Grafana:**
+Now we would be using our Monitoring Server which would be used to deploy Prometheus, Grafana and our EKS cluster and interact with it-
 
+1. **Install Prometheus and Grafana:**
+  
    Set up Prometheus and Grafana to monitor your application.
 
    **Installing Prometheus:**
@@ -852,27 +854,64 @@ Don't forget to reload or restart Prometheus to apply these changes to your conf
 
 To deploy an application with ArgoCD, you can follow these steps, which I'll outline in Markdown format:
 
-### Deploy Application with ArgoCD
+### Continuos Deployment
 
-1. **Install ArgoCD:**
+On the Monitoring server, perform the following actions-
 
-   You can install ArgoCD on your Kubernetes cluster by following the instructions provided in the [EKS Workshop](https://archive.eksworkshop.com/intermediate/290_argocd/install/) documentation.
+Install AWS CLI To interact with AWS services, we need to install AWS CLI version 2.
+Download the AWS CLI version 2 installer: curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 
-2. **Set Your GitHub Repository as a Source:**
+Install the unzip tool (if not already installed): sudo apt install unzip
 
-   After installing ArgoCD, you need to set up your GitHub repository as a source for your application deployment. This typically involves configuring the connection to your repository and defining the source for your ArgoCD application. The specific steps will depend on your setup and requirements.
+Unzip the AWS CLI installer: sudo unzip awscliv2.zip
 
-3. **Create an ArgoCD Application:**
-   - `name`: Set the name for your application.
-   - `destination`: Define the destination where your application should be deployed.
-   - `project`: Specify the project the application belongs to.
-   - `source`: Set the source of your application, including the GitHub repository URL, revision, and the path to the application within the repository.
-   - `syncPolicy`: Configure the sync policy, including automatic syncing, pruning, and self-healing.
+Install AWS CLI: sudo ./aws/install
 
-4. **Access your Application**
-   - To Access the app make sure port 30007 is open in your security group and then open a new tab paste your NodeIP:30007, your app should be running.
+Verify AWS CLI installation: aws --version
 
-**Phase 7: Cleanup**
+Install eksctl eksctl is a tool for creating and managing EKS clusters.
+Download and install eksctl: curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
 
-1. **Cleanup AWS EC2 Instances:**
-    - Terminate AWS EC2 instances that are no longer needed.
+Move eksctl to /usr/local/bin: sudo mv /tmp/eksctl /usr/local/bin
+
+Verify eksctl installation: eksctl version
+
+Install kubectl kubectl is a command-line tool to interact with Kubernetes clusters.
+Download kubectl: sudo curl --silent --location -o /usr/local/bin/kubectl https://s3.us-west-2.amazonaws.com/amazon-eks/1.22.6/2022-03-09/bin/linux/amd64/kubectl
+
+Make kubectl executable: sudo chmod +x /usr/local/bin/kubectl
+
+Verify kubectl installation: kubectl version --short --client
+
+Deploy EKS Cluster Use eksctl to create and manage an EKS cluster in AWS.
+Create an EKS cluster: eksctl create cluster --name demo-eks --region us-east-1 --nodegroup-name my-nodes --node-type t3.small --managed --nodes 2
+
+Verify the EKS cluster status: eksctl get cluster --name demo-eks --region us-east-1
+
+Update kubeconfig to interact with the EKS cluster: aws eks --region us-east-1 update-kubeconfig --name demo-eks
+
+image
+
+Install ArgoCD on EKS Cluster ArgoCD is a GitOps continuous delivery tool for Kubernetes.
+Create the argocd namespace: kubectl create namespace argocd
+
+Install ArgoCD by applying the official ArgoCD manifest: kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+
+Expose the ArgoCD server by modifying the service type to LoadBalancer: kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
+
+Retrieve the initial admin password for ArgoCD: kubectl get secret -n argocd argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+
+Access ArgoCD and configure with our github repository
+Step 1: Access ArgoCD UI via Load Balancer image
+
+Obtain the Load Balancer DNS name:
+
+From the AWS Load Balancer details page, copy the DNS name. Example: accc5153de474fafcb33569c0c833299-976374730.us-east-1.elb.amazonaws.com. Access ArgoCD UI in a browser:
+
+Open your browser and navigate to the Load Balancer URL: http://accc5153de474fafcb33569c0c833299-976374730.us-east-1.elb.amazonaws.com. Login to ArgoCD:
+
+image
+
+Use the admin username and the initial password fetched from the secret: sql Copy code kubectl get secret -n argocd argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d Step 2: Create a New Application in ArgoCD In the ArgoCD UI:
+
+Click on + New App. Fill in Application Details:
