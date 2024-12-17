@@ -24,7 +24,71 @@
 
 **Step 1: Launch EC2 (Ubuntu 22.04):**
 
-- Provision an EC2 instance on AWS with Ubuntu 22.04.
+- Provision an EC2 instance on AWS using Terraform-
+# Terraform Setup and Usage on Windows
+
+## 1. Install Terraform on Windows
+
+### Download Terraform
+- Go to the [Terraform Downloads page](https://www.terraform.io/downloads).
+- Select the Windows version and download the ZIP file.
+
+### Extract the ZIP File
+- Extract the downloaded ZIP file to a directory (e.g., `C:\Terraform`).
+
+### Add Terraform to PATH
+- Press `Win + S`, search for "Environment Variables," and click **Edit the system environment variables**.
+- In the **System Properties** window, click **Environment Variables**.
+- Under **System variables**, select the `Path` variable and click **Edit**.
+- Click **New** and add the path to the directory where `terraform.exe` is located (e.g., `C:\Terraform`).
+- Click **OK** to save changes.
+
+2. ### Verify Installation
+- Open Command Prompt or PowerShell and run:
+  ```bash
+  terraform --version
+
+3. ### Install Terraform Dependencies
+Before initialising terraform, clone the repo and change  the working directory to EC2_deploy
+
+    ```bash
+    git clone https://github.com/hrithiksaini22/Netflix-Clone.git
+    cd \Netflix-Clone\EC2_deploy
+    ```
+Initialize Terraform
+Open Command Prompt or PowerShell.
+Navigate to the project folder where your main.tf file is located:
+cd C:\TerraformProjects\EC2_deploy
+Run the following command to initialize Terraform:
+terraform init
+This command downloads the required provider plugins and prepares your working directory for Terraform usage.
+
+4. ### Validate and Plan the Configuration
+Validate the Configuration
+To check for syntax errors or issues in your Terraform configuration, run:
+''' bash
+terraform validate
+'''
+Create an Execution Plan
+Before applying the configuration, it's important to preview the changes that Terraform will make. Run:
+'''bash
+terraform plan
+'''
+This will show a summary of the actions Terraform will take to create, update, or delete resources.
+
+5. Apply the Configuration
+Apply Changes
+After reviewing the plan, you can apply the configuration to create the resources. Run:
+'''bash
+terraform apply -auto-approve
+'''
+Terraform will display the proposed changes and prompt you to confirm by typing yes to proceed with the creation of resources.
+Check the State
+Terraform keeps track of the resources it manages in a state file (terraform.tfstate). To view the list of resources being managed, use the following command:
+bash
+Copy code
+terraform state list
+
 - Connect to the instance using SSH.
 
 **Step 2: Clone the Code:**
