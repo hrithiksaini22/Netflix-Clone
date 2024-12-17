@@ -264,119 +264,108 @@ Certainly, here are the instructions without step numbers:
 Now, you have installed the Dependency-Check plugin, configured the tool, and added Docker-related plugins along with your DockerHub credentials in Jenkins. You can now proceed with configuring your Jenkins pipeline to include these tools and credentials in your CI/CD process.
 
 ```groovy
-
-pipeline{
+pipeline {
     agent any
-    tools{
+    tools {
         jdk 'jdk17'
         nodejs 'node16'
     }
     environment {
-        SCANNER_HOME=tool 'sonar-scanner'
-        registry = "980921731940.dkr.ecr.us-east-1.amazonaws.com/my-reepository"
-        BUILD_NUMBER = "${BUILD_NUMBER}"
+        SCANNER_HOME = tool 'sonar-scanner'
+        registry = "980921731940.dkr.ecr.us-east-1.amazonaws.com/my-repository"
     }
     stages {
-        stage('clean workspace'){
-            steps{
+        stage('Clean Workspace') {
+            steps {
                 cleanWs()
             }
         }
-        stage('Checkout from Git'){
-            steps{
+        stage('Checkout from Git') {
+            steps {
                 git branch: 'main', url: 'https://github.com/hrithiksaini22/Netflix-Clone.git'
             }
         }
-        stage("Sonarqube Analysis "){
-            steps{
+        stage('SonarQube Analysis') {
+            steps {
                 withSonarQubeEnv('sonar-server') {
-                    sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=Netflix \
-                    -Dsonar.projectKey=Netflix '''
+                    sh '''
+                        $SCANNER_HOME/bin/sonar-scanner \
+                        -Dsonar.projectName=Netflix \
+                        -Dsonar.projectKey=Netflix
+                    '''
                 }
             }
         }
-        stage("quality gate"){
-           steps {
+        stage('Quality Gate') {
+            steps {
                 script {
-                    waitForQualityGate abortPipeline: false, credentialsId: 'Sonar-token' 
+                    waitForQualityGate abortPipeline: false, credentialsId: 'Sonar-token'
                 }
-            } 
+            }
         }
         stage('Install Dependencies') {
             steps {
                 sh "npm install"
             }
         }
-        stage('OWASP FS SCAN') {
+        stage('OWASP FS Scan') {
             steps {
                 dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'DP-Check'
                 dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
             }
         }
-        stage('TRIVY FS SCAN') {
+        stage('Trivy FS Scan') {
             steps {
                 sh "trivy fs . > trivyfs.txt"
             }
         }
-        stage('Building image') {
+        stage('Building Docker Image') {
             steps {
                 script {
                     // List files for debugging purposes
-                    sh 'ls -la /var/lib/jenkins/workspace/CI'  // Debugging workspace contents
-
-                    // Build Docker image
-                    sh "docker build --build-arg TMDB_V3_API_KEY=<yourtmdbapikey> -t ${registry}:${BUILD_NUMBER} ."
+                    sh 'ls -la /var/lib/jenkins/workspace/CI'
+                    
+                    // Build Docker image with an API key passed as a build argument
+                    sh "docker build --build-arg TMDB_V3_API_KEY=<yourtmdbapikey> -t ${registry}:${env.BUILD_NUMBER} ."
                 }
             }
         }
-        stage("TRIVY"){
-            steps{
-                sh "trivy image ${registry}:${BUILD_NUMBER} > trivyimage.txt" 
+        stage('Trivy Image Scan') {
+            steps {
+                sh "trivy image ${registry}:${env.BUILD_NUMBER} > trivyimage.txt"
             }
         }
         stage('Pushing to ECR') {
             steps {
                 script {
                     // Log in to ECR using AWS CLI
-                    sh 'aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 980921731940.dkr.ecr.us-east-1.amazonaws.com'
+                    sh '''
+                        aws ecr get-login-password --region us-east-1 | \
+                        docker login --username AWS --password-stdin 980921731940.dkr.ecr.us-east-1.amazonaws.com
+                    '''
                     
                     // Push Docker image to ECR
-                    sh "docker push ${registry}:${BUILD_NUMBER}"
+                    sh "docker push ${registry}:${env.BUILD_NUMBER}"
                 }
             }
         }
+    }
     post {
-        // Clean up after the build process
         always {
             // Clean the workspace
-            cleanWs(cleanWhenNotBuilt: false,
-                    deleteDirs: true,
-                    disableDeferredWipeout: true,
-                    notFailBuild: true,
-                    patterns: [[pattern: '.gitignore', type: 'INCLUDE'],
-                               [pattern: '.propsfile', type: 'EXCLUDE']])
-
+            cleanWs(deleteDirs: true)
+            
             // Clean up Docker containers and volumes (optional)
-            sh '''
-                # Remove any stopped containers
-                docker container prune -f
-
-                # Remove unused Docker volumes
-                docker volume prune -f
-
-                # Remove unused networks
-                docker network prune -f
-            '''
+            script {
+                sh '''
+                    docker container prune -f
+                    docker volume prune -f
+                    docker network prune -f
+                '''
+            }
         }
     }
 }
-
-
-If you get docker login failed errorr
-
-sudo su
-sudo usermod -aG docker jenkins
-sudo systemctl restart jenkins
 
 
 ```
