@@ -260,6 +260,48 @@ Certainly, here are the instructions without step numbers:
   - docker-build-step
 - Click on the "Install without restart" button to install these plugins.
 
+** How to lauch and provide access to the ECR repo from EC2 instance:**
+1. Create an ECR Repository
+Via AWS Management Console:
+
+Go to the Amazon ECR service in the AWS Console.
+Click on Create Repository.
+Provide the repository name (e.g., my-repository).
+Choose settings like public or private visibility.
+Click Create Repository.
+Via AWS CLI: Run the following command:
+
+aws ecr create-repository --repository-name my-repository --region <region>
+
+Example:
+
+aws ecr create-repository --repository-name my-repository --region us-east-1
+Output: You’ll get the repository URI (e.g., 123456789012.dkr.ecr.us-east-1.amazonaws.com/my-repository).
+
+2. Create and Attach an IAM Role to EC2
+Create an IAM Role:
+
+Go to the IAM service in the AWS Console.
+
+Select Roles and click Create Role.
+
+Under Trusted Entity Type, select AWS Service.
+
+Select EC2 as the service that will use the role.
+
+Attach the following policy:
+
+AmazonEC2ContainerRegistryReadOnly: Provides read-only access to ECR.
+(Optional) AmazonEC2ContainerRegistryFullAccess: Provides full access to ECR if you need push/pull capabilities.
+Name the role (e.g., ECRAccessRole) and create it.
+
+Attach the IAM Role to EC2:
+
+Go to the EC2 Dashboard.
+Select your instance.
+Click Actions > Security > Modify IAM Role.
+Choose the role you created (ECRAccessRole) and attach it.
+
 
 Now, you have installed the Dependency-Check plugin, configured the tool, and added Docker-related plugins along with your DockerHub credentials in Jenkins. You can now proceed with configuring your Jenkins pipeline to include these tools and credentials in your CI/CD process.
 
