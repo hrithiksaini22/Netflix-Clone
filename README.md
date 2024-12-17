@@ -57,41 +57,47 @@ Before initialising terraform, clone the repo and change  the working directory 
     ```
 Initialize Terraform
 Open Command Prompt or PowerShell.
+
 Navigate to the project folder where your main.tf file is located:
+
 cd C:\TerraformProjects\EC2_deploy
+
 Run the following command to initialize Terraform:
+
 terraform init
+
 This command downloads the required provider plugins and prepares your working directory for Terraform usage.
 
 4. ### Validate and Plan the Configuration
 Validate the Configuration
 To check for syntax errors or issues in your Terraform configuration, run:
-''' bash
+```bash
 terraform validate
-'''
+```
 Create an Execution Plan
 Before applying the configuration, it's important to preview the changes that Terraform will make. Run:
-'''bash
+```bash
 terraform plan
-'''
+```
 This will show a summary of the actions Terraform will take to create, update, or delete resources.
 
 5. ### Apply the Configuration
 Apply Changes
 After reviewing the plan, you can apply the configuration to create the resources. Run:
-'''bash
+```bash
 terraform apply -auto-approve
-'''
+```
 Terraform will display the proposed changes and prompt you to confirm by typing yes to proceed with the creation of resources.
 Check the State
 Terraform keeps track of the resources it manages in a state file (terraform.tfstate). To view the list of resources being managed, use the following command:
-bash
-Copy code
+```bash
 terraform state list
-
+```
 - Connect to the instance using SSH.
 
-**Step 2: Clone the Code:**
+### Now open the EC2 instance from aws console and connect to the instance via Instance Connect
+
+**Clone the Code:**
 
 - Update all the packages and then clone the code.
 - Clone your application's code repository onto the EC2 instance:
@@ -102,7 +108,7 @@ terraform state list
     ```
     
 
-**Step 3: Install Docker and Run the App Using a Container:**
+**Step 2: Install Docker and Run the App Using a Container:**
 
 - Set up Docker on the EC2 instance:
     
@@ -128,7 +134,7 @@ terraform state list
 
 It will show an error cause you need API key
 
-**Step 4: Get the API Key:**
+**Step 3: Get the API Key:**
 
 - Open a web browser and navigate to TMDB (The Movie Database) website.
 - Click on "Login" and create an account.
