@@ -9,10 +9,8 @@
 
 <br />
 
-<div align="center">
-  <img src="./public/assets/home-page.png" alt="Logo" width="100%" height="100%">
-  <p align="center">Home Page</p>
-</div>
+![home-page](https://github.com/user-attachments/assets/4943da9f-5219-4885-818b-6bc046508715)
+
 
 # **Youtube Video for step by step Demonstration!**
 
