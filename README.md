@@ -880,22 +880,17 @@ Now we would be deploying a new Ubuntu EC2 instance which would be used to deplo
 
 1. Install AWS CLI
 To interact with AWS services, we need to install AWS CLI version 2.
+```bash 
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" 
 
-Download the AWS CLI version 2 installer:
-curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-
-Install the unzip tool (if not already installed):
 sudo apt install unzip
 
-Unzip the AWS CLI installer:
-sudo unzip awscliv2.zip
+sudo unzip awscliv2.zip  
 
-Install AWS CLI:
 sudo ./aws/install
 
-Verify AWS CLI installation:
 aws --version
-
+```
 2. Install eksctl
 eksctl is a tool for creating and managing EKS clusters.
 
