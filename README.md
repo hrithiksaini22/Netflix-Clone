@@ -321,7 +321,18 @@ Certainly, here are the instructions without step numbers:
   - docker-build-step
 - Click on the "Install without restart" button to install these plugins.
 
-** How to lauch and provide access to the ECR repo from EC2 instance:**
+### Configure Email Extension Plugin-
+Save Credentials as gmail using username and password and save the password you fetched from google i.e our appp passwrod we generated.
+
+![Screenshot 2024-12-18 151544](https://github.com/user-attachments/assets/83095942-eb6b-42d2-b817-380a6e5e2949)
+
+![Screenshot 2024-12-18 151620](https://github.com/user-attachments/assets/68317f2e-c93e-4777-a62a-4660311417ef)
+
+![Screenshot 2024-12-18 151642](https://github.com/user-attachments/assets/87661259-4760-434f-ade6-22b370a623ad)
+
+![Screenshot 2024-12-18 151656](https://github.com/user-attachments/assets/48083d8b-6ef0-4b3e-b4dd-905a782b1e02)
+
+### How to lauch and provide access to the ECR repo from EC2 instance:
 1. Create an ECR Repository
 Via AWS Management Console:
 
