@@ -5,10 +5,9 @@ metadata:
   labels:
     app: netflix-app
 spec:
-  type: NodePort
+  type: LoadBalancer
   ports:
-  - port: 80
-    targetPort: 80
-    nodePort: 30007
+  - port: 80               # Port exposed externally
+    targetPort: 80         # Port exposed internally by the app
   selector:
-    app: netflix-app
+    app: netflix-app       # Must match the labels of your Deployment pods
