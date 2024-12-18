@@ -485,9 +485,18 @@ pipeline {
     }
     post {
         always {
+            // Send email notification
+            emailext attachLog: true,
+                subject: "'${currentBuild.result}'",
+                body: "Project: ${env.JOB_NAME}<br/>" +
+                      "Build Number: ${env.BUILD_NUMBER}<br/>" +
+                      "URL: ${env.BUILD_URL}<br/>",
+                to: 'hrithik437436@gmail.com', // Change email here
+                attachmentsPattern: 'trivyfs.txt,trivyimage.txt'
+    
             // Clean the workspace
             cleanWs(deleteDirs: true)
-            
+    
             // Clean up Docker containers and volumes (optional)
             script {
                 sh '''
@@ -498,6 +507,7 @@ pipeline {
             }
         }
     }
+
 }
 
 
