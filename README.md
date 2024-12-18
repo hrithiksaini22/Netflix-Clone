@@ -1,13 +1,5 @@
-<div align="center">
-  <img src="./public/assets/DevSecOps.png" alt="Logo" width="100%" height="100%">
+![WhatsApp Image 2024-12-18 at 00 23 19_04c91f06](https://github.com/user-attachments/assets/bc671835-e27c-43af-a6c6-cdf4a922fd76)
 
-  <br>
-  <a href="http://netflix-clone-with-tmdb-using-react-mui.vercel.app/">
-    <img src="./public/assets/netflix-logo.png" alt="Logo" width="100" height="32">
-  </a>
-</div>
-
-<br />
 
 ![home-page](https://github.com/user-attachments/assets/4943da9f-5219-4885-818b-6bc046508715)
 
