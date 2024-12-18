@@ -520,6 +520,15 @@ pipeline {
 
 ![Screenshot 2024-12-17 230839](https://github.com/user-attachments/assets/db11b451-f606-4589-9ba6-702361f1b0d5)
 
+### Email Recieved via SMTP-
+
+![Screenshot 2024-12-18 145319](https://github.com/user-attachments/assets/57108b39-4055-4408-9ab8-c3965a224356)
+
+![Screenshot 2024-12-18 145335](https://github.com/user-attachments/assets/0f5c223c-2b1e-4306-b3cd-782e5c324150)
+
+![Screenshot 2024-12-18 145348](https://github.com/user-attachments/assets/991a9e45-c9a2-43a9-ae61-5e05cf299a0d)
+
+
 **Phase 4: Monitoring**
 
 Now we would be using our Monitoring Server which would be used to deploy Prometheus, Grafana and our EKS cluster and interact with it-
