@@ -6,7 +6,7 @@
 
 # **Youtube Video for step by step Demonstration!**
 
-Youtube- https://lnkd.in/gjJvjaeg
+Youtube- https://www.youtube.com/watch?v=CwoZUvkPM68
 
 
 # Deploy Netflix Clone on Cloud using Jenkins - DevSecOps Project!
