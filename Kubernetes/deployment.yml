@@ -17,6 +17,6 @@ spec:
     spec:
       containers:
       - name: netflix-app
-        image: 980921731940.dkr.ecr.us-east-1.amazonaws.com/my-reepository:latest
+        image: 980921731940.dkr.ecr.us-east-1.amazonaws.com/my-reepository:4
         ports:
         - containerPort: 80
