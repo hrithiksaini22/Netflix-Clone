@@ -990,6 +990,10 @@ Click Create.
 
 ![Screenshot 2024-12-17 225558](https://github.com/user-attachments/assets/cc8a5d87-363c-4fb4-a644-8d75036d838e)
 
+### Access the Netflix clone via Loadbalancer which has been launched by ArgoCD-
+
+![Screenshot 2024-12-17 225537](https://github.com/user-attachments/assets/c79eab1c-f47f-4a8b-b92a-66e0e5c5a6d8)
+
 
 ## Monitor Kubernetes with Prometheus
 
