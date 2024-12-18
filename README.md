@@ -372,6 +372,25 @@ Select your instance.
 Click Actions > Security > Modify IAM Role.
 Choose the role you created (ECRAccessRole) and attach it.
 
+### Fetch the API key for OWASP dependency check
+
+Steps to Obtain an NVD API Key:
+Go to the NVD Website: [Visit the NVD API Documentation page](https://nvd.nist.gov/developers/request-an-api-key).
+
+Create an Account: If you don’t already have an account, click on the "Sign Up" button and create a new account with your email address.
+
+Log In: After creating the account, log in using your credentials.
+
+Request an API Key:
+
+Once logged in, navigate to the "API Key Request" section.
+Provide the required information, such as why you need the API key and agree to their terms of use.
+Submit the request.
+Receive the API Key:
+
+After submitting your request, you will receive an email containing the API key.
+This process is typically automated, so you should receive the key almost instantly.
+Add the API Key to Your Pipeline Script:
 
 Now, you have installed the Dependency-Check plugin, configured the tool, and added Docker-related plugins along with your DockerHub credentials in Jenkins. You can now proceed with configuring your Jenkins pipeline to include these tools and credentials in your CI/CD process.
 
